@@ -111,17 +111,111 @@ class ScalarVariable(ABC):
 
 
 class Real(ScalarVariable):
-    def __init__(self, name: str, start: Optional[Any] = None, **kwargs):
+    def __init__(self, name: str, start: Optional[float] = None, declared_type: Optional[str] = None,
+                 quantity: Optional[str] = None, unit: Optional[str] = None, display_unit: Optional[str] = None,
+                 relative_quantity: Optional[bool] = None, min_: Optional[float] = None, max_: Optional[float] = None,
+                 nominal: Optional[float] = None, unbounded: Optional[bool] = None, derivative: Optional[int] = None,
+                 reinit: Optional[bool] = None, **kwargs):
         super().__init__(name, **kwargs)
-        self.__attrs = {"start": start}
+        self.__attrs = {"start": start, "declaredType": declared_type, "quantity": quantity, "unit": unit,
+                        "displayUnit": display_unit, "relativeQuantity": relative_quantity, "min": min_, "max": max_,
+                        "nominal": nominal, "unbounded": unbounded, "derivative": derivative, "reinit": reinit}
 
     @property
-    def start(self) -> Optional[Any]:
+    def start(self) -> Optional[float]:
         return self.__attrs["start"]
+
+    @property
+    def declared_type(self) -> Optional[str]:
+        return self.__attrs["declaredType"]
+
+    @property
+    def quantity(self) -> Optional[str]:
+        return self.__attrs["quantity"]
+
+    @property
+    def unit(self) -> Optional[str]:
+        return self.__attrs["unit"]
+
+    @property
+    def display_unit(self) -> Optional[str]:
+        return self.__attrs["displayUnit"]
+
+    @property
+    def relative_quantity(self) -> Optional[bool]:
+        return self.__attrs["relativeQuantity"]
+
+    @property
+    def min(self) -> Optional[float]:
+        return self.__attrs["min"]
+
+    @property
+    def max(self) -> Optional[float]:
+        return self.__attrs["max"]
+
+    @property
+    def nominal(self) -> Optional[float]:
+        return self.__attrs["nominal"]
+
+    @property
+    def unbounded(self) -> Optional[bool]:
+        return self.__attrs["unbounded"]
+
+    @property
+    def derivative(self) -> Optional[int]:
+        return self.__attrs["derivative"]
+
+    @property
+    def reinit(self) -> Optional[bool]:
+        return self.__attrs["reinit"]
 
     @start.setter
     def start(self, value: float):
         self.__attrs["start"] = value
+
+    @declared_type.setter
+    def declared_type(self, value: str):
+        self.__attrs["declaredType"] = value
+
+    @quantity.setter
+    def quantity(self, value: str):
+        self.__attrs["quantity"] = value
+
+    @unit.setter
+    def unit(self, value: str):
+        self.__attrs["unit"] = value
+
+    @display_unit.setter
+    def display_unit(self, value: str):
+        self.__attrs["displayUnit"] = value
+
+    @relative_quantity.setter
+    def relative_quantity(self, value: bool):
+        self.__attrs["relativeQuantity"] = value
+
+    @min.setter
+    def min(self, value: float):
+        self.__attrs["min"] = value
+
+    @max.setter
+    def max(self, value: float):
+        self.__attrs["max"] = value
+
+    @nominal.setter
+    def nominal(self, value: float):
+        self.__attrs["nominal"] = value
+
+    @unbounded.setter
+    def unbounded(self, value: bool):
+        self.__attrs["unbounded"] = value
+
+    @derivative.setter
+    def derivative(self, value: int):
+        self.__attrs["derivative"] = value
+
+    @reinit.setter
+    def reinit(self, value: bool):
+        self.__attrs["reinit"] = value
 
     def to_xml(self) -> Element:
         attrib = dict()
@@ -129,7 +223,12 @@ class Real(ScalarVariable):
             if value is not None:
                 # In order to not loose precision, a number of this type should be 
                 # stored on an XML file with at least 16 significant digits
-                attrib[key] = f"{value:.16g}"
+                if key in ["start", "min", "max", "nominal"]:
+                    attrib[key] = f"{value:.16g}"
+                elif key in ["relativeQuantity", "unbounded", "reinit"]:
+                    attrib[key] = str(value).lower()
+                else:
+                    attrib[key] = str(value)
         parent = super().to_xml()
         SubElement(parent, "Real", attrib)
 
@@ -137,17 +236,50 @@ class Real(ScalarVariable):
 
 
 class Integer(ScalarVariable):
-    def __init__(self, name: str, start: Optional[Any] = None, **kwargs):
+    def __init__(self, name: str, start: Optional[int] = None, declared_type: Optional[str] = None,
+                 quantity: Optional[str] = None, min_: Optional[int] = None, max_: Optional[int] = None, **kwargs):
         super().__init__(name, **kwargs)
-        self.__attrs = {"start": start}
+        self.__attrs = {"start": start, "declaredType": declared_type, "quantity": quantity, "min": min_, "max": max_}
 
     @property
-    def start(self) -> Optional[Any]:
+    def start(self) -> Optional[int]:
         return self.__attrs["start"]
 
+    @property
+    def declared_type(self) -> Optional[str]:
+        return self.__attrs["declaredType"]
+
+    @property
+    def quantity(self) -> Optional[str]:
+        return self.__attrs["quantity"]
+
+    @property
+    def min(self) -> Optional[Any]:
+        return self.__attrs["min"]
+
+    @property
+    def max(self) -> Optional[Any]:
+        return self.__attrs["max"]
+
     @start.setter
-    def start(self, value: float):
+    def start(self, value: int):
         self.__attrs["start"] = value
+
+    @declared_type.setter
+    def declared_type(self, value: str):
+        self.__attrs["declaredType"] = value
+
+    @quantity.setter
+    def quantity(self, value: str):
+        self.__attrs["quantity"] = value
+
+    @min.setter
+    def min(self, value: int):
+        self.__attrs["min"] = value
+
+    @max.setter
+    def max(self, value: int):
+        self.__attrs["max"] = value
 
     def to_xml(self) -> Element:
         attrib = dict()
@@ -161,23 +293,34 @@ class Integer(ScalarVariable):
 
 
 class Boolean(ScalarVariable):
-    def __init__(self, name: str, start: Optional[Any] = None, **kwargs):
+    def __init__(self, name: str, start: Optional[bool] = None, declared_type: Optional[str] = None, **kwargs):
         super().__init__(name, **kwargs)
-        self.__attrs = {"start": start}
+        self.__attrs = {"start": start, "declaredType": declared_type}
 
     @property
-    def start(self) -> Optional[Any]:
+    def start(self) -> Optional[bool]:
         return self.__attrs["start"]
 
+    @property
+    def declared_type(self) -> Optional[str]:
+        return self.__attrs["declaredType"]
+
     @start.setter
-    def start(self, value: float):
+    def start(self, value: bool):
         self.__attrs["start"] = value
+
+    @declared_type.setter
+    def declared_type(self, value: str):
+        self.__attrs["declaredType"] = value
 
     def to_xml(self) -> Element:
         attrib = dict()
         for key, value in self.__attrs.items():
             if value is not None:
-                attrib[key] = str(value).lower()
+                if key == "start":
+                    attrib[key] = str(value).lower()
+                else:
+                    attrib[key] = str(value)
         parent = super().to_xml()
         SubElement(parent, "Boolean", attrib)
 
@@ -185,17 +328,25 @@ class Boolean(ScalarVariable):
 
 
 class String(ScalarVariable):
-    def __init__(self, name: str, start: Optional[Any] = None, **kwargs):
+    def __init__(self, name: str, start: Optional[str] = None, declared_type: Optional[str] = None, **kwargs):
         super().__init__(name, **kwargs)
-        self.__attrs = {"start": start}
+        self.__attrs = {"start": start, "declaredType": declared_type}
 
     @property
-    def start(self) -> Optional[Any]:
+    def start(self) -> Optional[str]:
         return self.__attrs["start"]
 
+    @property
+    def declared_type(self) -> Optional[str]:
+        return self.__attrs["declaredType"]
+
     @start.setter
-    def start(self, value: float):
+    def start(self, value: str):
         self.__attrs["start"] = value
+
+    @declared_type.setter
+    def declared_type(self, value: str):
+        self.__attrs["declaredType"] = value
 
     def to_xml(self) -> Element:
         attrib = dict()
@@ -204,5 +355,62 @@ class String(ScalarVariable):
                 attrib[key] = str(value)
         parent = super().to_xml()
         SubElement(parent, "String", attrib)
+
+        return parent
+
+
+class Enumeration(ScalarVariable):
+    def __init__(self, name: str, start: Optional[int] = None, declared_type: Optional[str] = None,
+                 quantity: Optional[str] = None, min_: Optional[int] = None, max_: Optional[int] = None, **kwargs):
+        super().__init__(name, **kwargs)
+        self.__attrs = {"start": start, "declaredType": declared_type, "quantity": quantity, "min": min_, "max": max_}
+
+    @property
+    def start(self) -> Optional[int]:
+        return self.__attrs["start"]
+
+    @property
+    def declared_type(self) -> Optional[str]:
+        return self.__attrs["declaredType"]
+
+    @property
+    def quantity(self) -> Optional[str]:
+        return self.__attrs["quantity"]
+
+    @property
+    def min(self) -> Optional[int]:
+        return self.__attrs["min"]
+
+    @property
+    def max(self) -> Optional[int]:
+        return self.__attrs["max"]
+
+    @start.setter
+    def start(self, value: int):
+        self.__attrs["start"] = value
+
+    @declared_type.setter
+    def declared_type(self, value: str):
+        self.__attrs["declaredType"] = value
+
+    @quantity.setter
+    def quantity(self, value: str):
+        self.__attrs["quantity"] = value
+
+    @min.setter
+    def min(self, value: int):
+        self.__attrs["min"] = value
+
+    @max.setter
+    def max(self, value: int):
+        self.__attrs["max"] = value
+
+    def to_xml(self) -> Element:
+        attrib = dict()
+        for key, value in self.__attrs.items():
+            if value is not None:
+                attrib[key] = str(value)
+        parent = super().to_xml()
+        SubElement(parent, "Enumeration", attrib)
 
         return parent
