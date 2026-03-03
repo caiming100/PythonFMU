@@ -192,11 +192,9 @@ class Fmi2Slave(ABC):
     def setup_experiment(self, start_time: float, stop_time: Optional[float], tolerance: Optional[float]):
         pass
 
-    @abstractmethod
     def enter_initialization_mode(self):
         pass
 
-    @abstractmethod
     def exit_initialization_mode(self):
         pass
 

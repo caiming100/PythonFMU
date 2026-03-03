@@ -96,38 +96,6 @@ class Real(SimpleType):
     def unbounded(self) -> Optional[bool]:
         return self.__attrs["unbounded"]
 
-    @quantity.setter
-    def quantity(self, value: str):
-        self.__attrs["quantity"] = value
-
-    @unit.setter
-    def unit(self, value: str):
-        self.__attrs["unit"] = value
-
-    @display_unit.setter
-    def display_unit(self, value: str):
-        self.__attrs["displayUnit"] = value
-
-    @relative_quantity.setter
-    def relative_quantity(self, value: bool):
-        self.__attrs["relativeQuantity"] = value
-
-    @min.setter
-    def min(self, value: float):
-        self.__attrs["min"] = value
-
-    @max.setter
-    def max(self, value: float):
-        self.__attrs["max"] = value
-
-    @nominal.setter
-    def nominal(self, value: float):
-        self.__attrs["nominal"] = value
-
-    @unbounded.setter
-    def unbounded(self, value: bool):
-        self.__attrs["unbounded"] = value
-
     def to_xml(self) -> Element:
         attrib = dict()
         for key, value in self.__attrs.items():
@@ -164,18 +132,6 @@ class Integer(SimpleType):
     def max(self) -> Optional[int]:
         return self.__attrs["max"]
 
-    @quantity.setter
-    def quantity(self, value: str):
-        self.__attrs["quantity"] = value
-
-    @min.setter
-    def min(self, value: int):
-        self.__attrs["min"] = value
-
-    @max.setter
-    def max(self, value: int):
-        self.__attrs["max"] = value
-
     def to_xml(self) -> Element:
         attrib = dict()
         for key, value in self.__attrs.items():
@@ -206,14 +162,6 @@ class Enumeration(SimpleType):
     @property
     def item(self) -> list[Item]:
         return self.__attrs["Item"]
-
-    @quantity.setter
-    def quantity(self, value: str):
-        self.__attrs["quantity"] = value
-
-    @item.setter
-    def item(self, value: list[Item]):
-        self.__attrs["Item"] = value
 
     def to_xml(self) -> Element:
         attrib = dict()

@@ -173,50 +173,6 @@ class Real(ScalarVariable):
     def start(self, value: float):
         self.__attrs["start"] = value
 
-    @declared_type.setter
-    def declared_type(self, value: str):
-        self.__attrs["declaredType"] = value
-
-    @quantity.setter
-    def quantity(self, value: str):
-        self.__attrs["quantity"] = value
-
-    @unit.setter
-    def unit(self, value: str):
-        self.__attrs["unit"] = value
-
-    @display_unit.setter
-    def display_unit(self, value: str):
-        self.__attrs["displayUnit"] = value
-
-    @relative_quantity.setter
-    def relative_quantity(self, value: bool):
-        self.__attrs["relativeQuantity"] = value
-
-    @min.setter
-    def min(self, value: float):
-        self.__attrs["min"] = value
-
-    @max.setter
-    def max(self, value: float):
-        self.__attrs["max"] = value
-
-    @nominal.setter
-    def nominal(self, value: float):
-        self.__attrs["nominal"] = value
-
-    @unbounded.setter
-    def unbounded(self, value: bool):
-        self.__attrs["unbounded"] = value
-
-    @derivative.setter
-    def derivative(self, value: int):
-        self.__attrs["derivative"] = value
-
-    @reinit.setter
-    def reinit(self, value: bool):
-        self.__attrs["reinit"] = value
-
     def to_xml(self) -> Element:
         attrib = dict()
         for key, value in self.__attrs.items():
@@ -265,22 +221,6 @@ class Integer(ScalarVariable):
     def start(self, value: int):
         self.__attrs["start"] = value
 
-    @declared_type.setter
-    def declared_type(self, value: str):
-        self.__attrs["declaredType"] = value
-
-    @quantity.setter
-    def quantity(self, value: str):
-        self.__attrs["quantity"] = value
-
-    @min.setter
-    def min(self, value: int):
-        self.__attrs["min"] = value
-
-    @max.setter
-    def max(self, value: int):
-        self.__attrs["max"] = value
-
     def to_xml(self) -> Element:
         attrib = dict()
         for key, value in self.__attrs.items():
@@ -308,10 +248,6 @@ class Boolean(ScalarVariable):
     @start.setter
     def start(self, value: bool):
         self.__attrs["start"] = value
-
-    @declared_type.setter
-    def declared_type(self, value: str):
-        self.__attrs["declaredType"] = value
 
     def to_xml(self) -> Element:
         attrib = dict()
@@ -343,10 +279,6 @@ class String(ScalarVariable):
     @start.setter
     def start(self, value: str):
         self.__attrs["start"] = value
-
-    @declared_type.setter
-    def declared_type(self, value: str):
-        self.__attrs["declaredType"] = value
 
     def to_xml(self) -> Element:
         attrib = dict()
@@ -388,22 +320,6 @@ class Enumeration(ScalarVariable):
     @start.setter
     def start(self, value: int):
         self.__attrs["start"] = value
-
-    @declared_type.setter
-    def declared_type(self, value: str):
-        self.__attrs["declaredType"] = value
-
-    @quantity.setter
-    def quantity(self, value: str):
-        self.__attrs["quantity"] = value
-
-    @min.setter
-    def min(self, value: int):
-        self.__attrs["min"] = value
-
-    @max.setter
-    def max(self, value: int):
-        self.__attrs["max"] = value
 
     def to_xml(self) -> Element:
         attrib = dict()
