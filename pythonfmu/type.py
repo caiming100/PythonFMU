@@ -48,7 +48,7 @@ class SimpleType(ABC):
         for key, value in self.__attrs.items():
             if value is not None:
                 attrib[key] = str(value)
-        return Element("TypeDefinitions", attrib)
+        return Element("SimpleType", attrib)
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(name={self.name})"
